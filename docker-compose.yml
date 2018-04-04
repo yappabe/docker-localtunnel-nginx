@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  localtunnel:
+    image: defunctzombie/localtunnel-server
+    command: --port 3000 --domain ${LOCALTUNNEL_DOMAIN}
+    network_mode: host
+    restart: always
+
+  localtunnel-nginx:
+    image: defunctzombie/localtunnel-nginx:latest
+    depends_on:
+      - localtunnel
+    network_mode: host
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./ssl:/etc/nginx/ssl/
+    restart: always
